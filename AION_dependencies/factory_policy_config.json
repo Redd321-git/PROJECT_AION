@@ -1,0 +1,24 @@
+{
+	'machine types':["Conveyor","Robot Arm"]
+	
+	'machine count':
+	
+	'machines':{
+	
+	}
+	
+	'factory_graph':{
+		'roots':[]
+		'edges':{
+		
+		}
+	}
+	
+	'thresholds':{
+	
+	}
+
+	'baselines':{
+	
+	}
+}

@@ -1,0 +1,5 @@
+factory environment assumptions:
+	1) Fixed number of machines and machine types in the factory (for both training and inference) ----> machine types :["Conveyor" ,"Robot Arm"]
+	2) The modeled graph of the factory ( i.e. each machine is a node(conveyor, robotic arms etc) and the edge connecting is the flow of products) is assumed to be a DAG (Directed Acyclic Graph)
+	3) The sensors in the factory are not defective, produce accurate and not null data for each valid attribute of the machine corresponding to its machine type
+	4) When a machine goes under maintenance the machine regains it full health back after the maintenance
