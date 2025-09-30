@@ -3,7 +3,7 @@ from multiprocessing import Process, Queue, Event
 import time
 
 from env_interfaces import Environment
-from models import AgentState
+from models import AgentState,HealthMap
 
 from world_state_generator import Eye, KPI_compute
 from RUL_predictor import Foreseer
@@ -101,9 +101,9 @@ class AION:
 			except queue.Empty:
 				continue
 
-			health_map=self.forseer.predict(state)
+			health_map=HealthMap(self.forseer.predict(state))
 
-			if not self.watcher.permit(health_map):
+			if self.watcher.permit(health_map):
 				self.in_q.put({
 					"type":"status",
 					"payload":{

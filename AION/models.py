@@ -16,6 +16,7 @@ class Machine(BaseModel):
 	task: str
 	telemetry: Dict[str,float]
 	Remaining_Unit_Lifetime: Optional[float]=None
+	heath_report: Optional[Dict]=None
 	
 class KPI(BaseModel):
 	
@@ -32,12 +33,14 @@ class Goal(BaseModel):
 
 class State(BaseModel):
 	timestamp: datetime
-	machines:List[machine]
+	machines:List[Machine]
 	goals:List[goal]
 	kpi: KPI
 
-class HealthMap():
-	
+class HealthMap(State):
+	problems_identified:Optional[dict]=None
+	factor_health:Optional[str]=None
+
 class Query():
 
 class Reason():

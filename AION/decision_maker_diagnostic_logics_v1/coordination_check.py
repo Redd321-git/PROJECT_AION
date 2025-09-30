@@ -1,5 +1,6 @@
 from queue import Queue
-from AION.models import HealthMap
+from AION.models import HealthMap,Check_responce_schema
+
 class coordination_check():
 	def __init__(self,factory_config : dict):
 		
@@ -12,7 +13,7 @@ class coordination_check():
 				self.in_degree[child]+=1
 
 		
-	def check(self,health_map : HealthMap):
+	def check(self,health_map : HealthMap)->Check_responce_schema:
 		current_processing_power=health_map.current_processing_power
 		product_flow_ratio=health_map.product_flow_ratio
 		in_rate={m_id : 0 for m_id,m_type in self.machines.items()}

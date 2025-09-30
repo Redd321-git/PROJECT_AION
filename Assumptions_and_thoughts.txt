@@ -3,3 +3,10 @@ factory environment assumptions:
 	2) The modeled graph of the factory ( i.e. each machine is a node(conveyor, robotic arms etc) and the edge connecting is the flow of products) is assumed to be a DAG (Directed Acyclic Graph)
 	3) The sensors in the factory are not defective, produce accurate and not null data for each valid attribute of the machine corresponding to its machine type
 	4) When a machine goes under maintenance the machine regains it full health back after the maintenance
+
+
+thoughts:
+	1) the current model of the RUL predictor was not trained on proper data and might require model retraining
+		-> safe side the architecture of AION and the sae code written can give easy unplug and change of model version
+	2) will need to design the factory State and HealthMap properly deciding the attribute once again 
+		-> redesigning would be ideal to be performed at the end of the project after the complete architecture of AION has been designed
