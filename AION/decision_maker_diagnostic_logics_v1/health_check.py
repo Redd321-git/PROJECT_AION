@@ -1,4 +1,4 @@
-from AION.models import HealthMap,Check_responce_schema
+from AION.models import HealthMap,CheckResponceSchema
 
 def eval_health_attr_specific(val,condition,crit_threshold,warn_threshold):
 	if condition in ["<","<="]:
@@ -34,12 +34,12 @@ def eval_health_hierarchical(health_score:dict,warn_count_threshold:int):
 		
 
 class health_check():
-	def __init__(self,factory_config : dict):
+	def __init__(self,factory_config : dict, runtime_logics : dict):
 		self.baselines=factory_config["baselines"]
 		self.thresholds=factory_config["thresholds"]
-		self.warn_count_threshold=factory_config[".warn_count_threshold"]
+		self.warn_count_threshold=factory_config["warn_count_threshold"]
 
-	def check(self,health_map : HealthMap)->Check_responce_schema:
+	def check(self,health_map : HealthMap)->CheckResponceSchema:
 		health_scores_per_machine={}
 		health_flag=False
 		for machine in health_map.machines:
@@ -51,9 +51,13 @@ class health_check():
 					policy['crit_threshold'],
 					policy['warn_threshold']
 				)
-			health_score["health_summary"]=eval_health_hierarchical(health_score,self.thresholds["warn_count_threshold"])
+			health_score["health_summary"]=eval_health_hierarchical(health_score,self.warn_count_threshold)
 			health_scores_per_machine[machine.machine_id]=health_score["health_summary"]
 			machine.health_report=health_score
 		health_map.factory_health=eval_health_hierarchical(health_scores_per_machine,self.warn_count_threshold)
 		health_flag=health_map.factory_health!="healthy"
-		return {'violations':health_flag,'health_check':health_scores_per_machine}
+		return CheckResponceSchema(
+				violations=health_flag,
+				report={"health report per machine":health_scores_per_machine},
+				reach_out_signal={signal["reach_out"]:True}
+			)

@@ -24,6 +24,7 @@ class KPI(BaseModel):
 class Goal(BaseModel):
 	goal_id: str
 	description: str
+	goal_type: str
 	due_date: str
 	priority: str
 	target_quantity:Optional[int]=None
@@ -34,12 +35,14 @@ class Goal(BaseModel):
 class State(BaseModel):
 	timestamp: datetime
 	machines:List[Machine]
-	goals:List[goal]
+	goals:List[Goal]
 	kpi: KPI
 
 class HealthMap(State):
 	problems_identified:Optional[dict]=None
 	factor_health:Optional[str]=None
+
+Class CheckResponceSchema(BaseModel):
 
 class Query():
 

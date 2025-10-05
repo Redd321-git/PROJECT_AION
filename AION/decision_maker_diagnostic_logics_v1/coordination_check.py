@@ -1,8 +1,8 @@
 from queue import Queue
-from AION.models import HealthMap,Check_responce_schema
+from AION.models import HealthMap,CheckResponceSchema
 
 class coordination_check():
-	def __init__(self,factory_config : dict):
+	def __init__(self,factory_config : dict, runtime_logics : dict):
 		
 		self.start_nodes=factory_config['factory_graph']['roots']
 		self.edges=factory_config['factory_graph']['edges']
@@ -13,7 +13,7 @@ class coordination_check():
 				self.in_degree[child]+=1
 
 		
-	def check(self,health_map : HealthMap)->Check_responce_schema:
+	def check(self,health_map : HealthMap)->CheckResponceSchema:
 		current_processing_power=health_map.current_processing_power
 		product_flow_ratio=health_map.product_flow_ratio
 		in_rate={m_id : 0 for m_id,m_type in self.machines.items()}
@@ -38,6 +38,10 @@ class coordination_check():
 			if rate > current_processing_power.get(m_id,0)
 		}
 
-		return {'violations':bool(bottle_necks),'bottle necks':bottle_necks}
+		return CheckResponceSchema(
+				violations=bool(bottle_necks),
+				report={'bottle necks':bottle_necks},
+				reach_out_signal={signal["reach_out"]:True}
+			)
 				
 			

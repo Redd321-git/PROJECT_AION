@@ -1,0 +1,30 @@
+day - who knows 2025
+	factory environment assumptions:
+		1) Fixed number of machines and machine types in the factory (for both training and inference) ----> machine types :["Conveyor" ,"Robot Arm"]
+		2) The modeled graph of the factory ( i.e. each machine is a node(conveyor, robotic arms etc) and the edge connecting is the flow of products) is assumed to be a DAG (Directed Acyclic Graph)
+		3) The sensors in the factory are not defective, produce accurate and not null data for each valid attribute of the machine corresponding to its machine type
+		4) When a machine goes under maintenance the machine regains it full health back after the maintenance
+
+day - September 2025
+	thoughts:
+		1) the current model of the RUL predictor was not trained on proper data and might require model retraining
+			-> safe side the architecture of AION and the sae code written can give easy unplug and change of model version
+		2) will need to design the factory State and HealthMap properly deciding the attribute once again 
+			-> redesigning would be ideal to be performed at the end of the project after the complete architecture of AION has been designed
+
+day - September 30 2025
+	major architectural / logical update thoughts:
+		1) right now the in the architecture of AION the parts decision maker(observes the state /health map data and decides if an action is required) and planner(produces list of candidate actions that can be done based on the observed problems from the decision maker) are like layers uni-directional. why not make them more interactive? so that AION becomes much more powerful in decision making and planning. To support this "first normally decision maker identifies the issues and seeks planner for action, then the planner produces candidates but instead of moving to the pruner and validator, it reaches out to the decision maker if it safe to apply this actions and possible if not the decision maker can say rethink and like a loop and then if yes move to the rl_scorer. then apply this action ".
+			"for now lets hold this and complete the version 1 and after completion of AION v1 we will build version 2 and possibly apply it in a different domain"
+
+
+day - October 4 2025
+	requirements for decision maker diagnostic logics:
+		progress check logic:
+			1) must maintain a buffer that keeps track of the existing goals and the new ones that occur and the completed ones to be discarded from the buffer
+			2) must intimate decision maker to reach out planner or the operator for updating the runtime config file when ever it comes across a new goal type that it hasn't seen before 
+			3) must compute the progress check for each goal and goals are checked based on formulas provided in the runtime config file
+			4) must return an output in that shows if there are violations in the goal progress and report of the goal progress if violation is present and reach out signal for the planner
+	
+	"turns out i am actually changing the architecture of AION a bit in between decision maker and planner like i previously thought but on a lower scale. what actually happened while i was thinking of the code and logic of the progress check logic of the decision maker i found out that goals are not restricted to a single type they vary like {production goal is if it can satisfy all the dues date of product supply}, {try to reduce the power consumption this month } etc etc... but previous i thought of maintaining hardcoded function for goal specific progress checks but as this goals are very uncertain so what i did in the diagnostic logics i gave a option of intimating the decision maker to reach out the planner for novel cases when it doesn't have logic to assess the current situation then operator is to actually provide the logic for the progress check if he doesn't then he can give access to the planner for the logic generation to the planner. planner capable of generating logics for these novel scenarios can add new logic to the decision maker constantly evolving and contributing to the overall adaptability of AION to new situations "
+
