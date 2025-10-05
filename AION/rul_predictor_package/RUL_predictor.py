@@ -1,11 +1,12 @@
 from models import State
-from . import model, y_scaler, load_preprocessor
+from . import model, y_scaler, Preprocessor
+
 import numpy as np
 
 class Foreseer():
 	def __init__():
-		self.preprocessor=load_preprocessor()
-
+		self.preprocessor=Preprocessor()
+		
 	def predict(self,state: State):
 		self.machines=state.machines
 		for machine in self.machines:

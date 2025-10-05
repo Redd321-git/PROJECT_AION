@@ -1,7 +1,7 @@
 from AION.models import HealthMap, CheckResponceSchema
 
 class progress_check():
-	def __init__(self,factory_config : dict,runtime_logics):
+	def __init__(self,factory_config : dict, runtime_logics: dict):
 		self.goal_buffer={}
 		self.goal_types=runtime_logics
 		
@@ -19,9 +19,8 @@ class progress_check():
 		for goal_id,goal in self.goal_buffer.items():
 			compute_func=self.goal_progress_check_methods[goal.goal_type]
 			body=self.goal_types[goal.goal_type]
-			# retrival and processing of specified params from the health map and store it in the dict params
 			params={}
-			
+			# retrival and processing of specified params from the health map and store it in the dict params
 			eval_answer=compute_func(params)
 			
 		return CheckResponceSchema(

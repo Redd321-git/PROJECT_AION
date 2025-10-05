@@ -28,3 +28,14 @@ day - October 4 2025
 	
 	"turns out i am actually changing the architecture of AION a bit in between decision maker and planner like i previously thought but on a lower scale. what actually happened while i was thinking of the code and logic of the progress check logic of the decision maker i found out that goals are not restricted to a single type they vary like {production goal is if it can satisfy all the dues date of product supply}, {try to reduce the power consumption this month } etc etc... but previous i thought of maintaining hardcoded function for goal specific progress checks but as this goals are very uncertain so what i did in the diagnostic logics i gave a option of intimating the decision maker to reach out the planner for novel cases when it doesn't have logic to assess the current situation then operator is to actually provide the logic for the progress check if he doesn't then he can give access to the planner for the logic generation to the planner. planner capable of generating logics for these novel scenarios can add new logic to the decision maker constantly evolving and contributing to the overall adaptability of AION to new situations "
 
+
+
+day - October 5 2025
+	1) changed the entire structure of the code for good maintenance and as writing the code was getting harder as each part of AION is having many dependencies so for each part of AION i made a directory and put the part along with its dependencies in it that belong to the respective part like packages and connections between the packages are only written through the __init__.py files (e.g. if  decision_maker.py which is inside a directory decision_maker_package inside AION requires some function for the AION_runtime out side AION then AION's __init__ must import it then decision_maker_package imports it then decision_maker.py import it to use it)
+	2) for this change i made a new branch on git 
+		->saved the existing main to a back up branch 
+		->then merged rul_predictor_build branch to main 
+		->then created a new branch for this structure change
+	3)AION_runtime is the directory where the planner writes it new logics when reached out by decision_maker when it faces a new situation and decision_maker takes this logic and executes it
+	
+	"all this is ok but the thing is in progress check logic of the decision maker diagnostic logics the AION runtime function require data which must be extracted and processed for these functions to check the progress. so now what is happening is i am writing a function or you can say tool such that this function reach the data and perform processing and give the extracted params to the runtime functions of AION"

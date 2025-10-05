@@ -5,16 +5,16 @@ import time
 from env_interfaces import Environment
 from models import AgentState,HealthMap
 
-from world_state_generator import Eye, KPI_compute
-from RUL_predictor import Foreseer
-from decission_maker import Watcher
-from planner import Thinker
-from action_space import Pruner
-from rl_scorer import ViceOne
-from validation_layer import Validator
-from communication_layer import Voice
-from action_performer import Automaton
-from critic import Muse
+from AION.world_state_generator_package.world_state_generator import Eye, KPI_compute
+from AION.rul_predictor_package.RUL_predictor import Foreseer
+from AION.decission_maker_package.decission_maker import Watcher
+from AION.planner_package.planner import Thinker
+from AION.action_optimizer_package.action_space import Pruner
+from AION.rl_scorer_package.rl_scorer import ViceOne
+from AION.action_optimizer_package.validation_layer import Validator
+from AION.communication_layer import Voice
+from AION.action_performer_package.action_performer import Automaton
+from AION.critic_package.critic import Muse
 
 class AION:
 	def __init__(self,env: Environment):
