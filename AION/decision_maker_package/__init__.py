@@ -21,3 +21,35 @@ def load_diagnostic_logics( factory_config, runtime_logics):
 		cls=getattr(module,m)
 		diagnostic_logics[m]=cls(factory_config,runtime_logics)
 	return diagnostic_logics
+
+def eval_attr_specific(val: float,condition: str,crit_threshold: float,warn_threshold: float):
+	if condition in ["<","<="]:
+		if val<crit_threshold:
+			return "critical"
+		elif val<warn_threshold:
+			return "warning"
+		else:
+			return "healthy"
+
+	elif condition in [">",">="]:
+		if val>crit_threshold:
+			return "critical"
+		elif val>warn_threshold:
+			return "warning"
+		else:
+			return "healthy"
+	else:
+		raise ValueError(f"unknown condition: {condition}")
+
+def eval_hierarchical(health_score:dict,warn_count_threshold:int):
+	warn_count=0
+	for attr, cat in health_score.items():
+		if cat=="critical":
+			return "critical"
+		if cat=="warning":
+			warn_count+=1
+	if warn_count>warn_count_threshold:
+		 return "critical"
+	if warn_count<=1:
+		return "healthy"
+	return "warning"

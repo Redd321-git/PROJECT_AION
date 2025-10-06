@@ -17,8 +17,13 @@ class Watcher():
 		flag=True
 		for policy_name , policy in self.diagnostic_logics.items():
 			result=policy.check(health_map)
-			if result.reach_out_signal['reach_out']:
+
+			while result.reach_out_signal['reach_out']:
+
 				#logic for contacting the llm for logic or policy updation in the config file
+
+				result=policy.check(health_map)
+
 			if result.violations:
 				flag=False
 				health_map.problems_identified[policy_name]=result
