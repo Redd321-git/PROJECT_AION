@@ -9,7 +9,7 @@ class Foreseer():
 		
 	def predict(self,state: State):
 		self.machines=state.machines
-		for machine in self.machines:
+		for machine_id,machine in self.machines.items():
 			machine_type=machine.get('type')
 			machine_telemetry=machine.get('telemetry',{})
 			processed_telemetry=self.preprocessor.preprocess(machine_type,machine_telemetry)

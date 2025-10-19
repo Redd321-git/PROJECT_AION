@@ -10,7 +10,7 @@ class health_check():
 	def check(self,health_map : HealthMap)->CheckResponceSchema:
 		health_scores_per_machine={}
 		health_flag=False
-		for machine in health_map.machines:
+		for machine_id,machine in health_map.machines.items():
 			health_score={}
 			for attr,policy in self.thresholds[machine.machine_type].items():
 				health_score[attr]=eval_attr_specific(
@@ -20,7 +20,7 @@ class health_check():
 					policy['warn_threshold']
 				)
 			health_score["health_summary"]=eval_hierarchical(health_score,self.warn_count_threshold)
-			health_scores_per_machine[machine.machine_id]=health_score["health_summary"]
+			health_scores_per_machine[machine_id]=health_score["health_summary"]
 			machine.health_report=health_score
 		health_map.factory_health=eval_hierarchical(health_scores_per_machine,self.warn_count_threshold)
 		health_flag=health_map.factory_health!="healthy"
