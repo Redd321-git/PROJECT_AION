@@ -39,3 +39,16 @@ day - October 5 2025
 	3)AION_runtime is the directory where the planner writes it new logics when reached out by decision_maker when it faces a new situation and decision_maker takes this logic and executes it
 	
 	"all this is ok but the thing is in progress check logic of the decision maker diagnostic logics the AION runtime function require data which must be extracted and processed for these functions to check the progress. so now what is happening is i am writing a function or you can say tool such that this function reach the data and perform processing and give the extracted params to the runtime functions of AION"
+
+day - October 9 2025
+	from the decision maker diagnostic logics one of the logics safety logics has been removed due to the reason
+		-> feel like redundancy as health check is already present 
+		-> and no capable candidate for the replacement 
+	
+day - October 19 2025
+	1)we moved from one llm to 3 llms for the different tasks of the planner as we could not find a llm that is enough powerful and also in budget so we moved to 3 free models that we are going to run on a different laptop using ollama and fetch the response via http or something 
+	2) also we are going to put some time constrains on the logic generation by planner as it is taking longer time for responses and the cycle cannot wait for the response but we can use the logic in next relevant cycle
+	3) the task 
+			code generation			- larger model (loaded on demand)
+			reasoning 			- small model (in memory) but fast 
+			action set generation 		- small model (in memory) fast
