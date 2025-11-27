@@ -1,0 +1,10 @@
+uvicorn
+requests
+fastapi
+ollama
+tensorflow
+asyncio
+pydantic
+numpy
+joblib
+

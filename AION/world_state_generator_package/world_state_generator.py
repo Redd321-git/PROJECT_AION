@@ -1,4 +1,4 @@
-from models import State
+from AION.schemas import State
 from env_interfaces import Environment
 
 class Eye:

@@ -28,8 +28,8 @@ class Goal(BaseModel):
 	due_date: str
 	priority: str
 	target_quantity:Optional[int]=None
-	completed_quantity: Optinal[int]=None
-	baseline: Optinal[float]=None
+	completed_quantity: Optional[int]=None
+	baseline: Optional[float]=None
 	current: Optional[float]=None
 
 class State(BaseModel):
@@ -42,7 +42,7 @@ class HealthMap(State):
 	problems_identified:Optional[dict]=None
 	factor_health:Optional[str]=None
 
-Class CheckResponceSchema(BaseModel):
+class CheckResponceSchema(BaseModel):
 
 class Query():
 
@@ -52,3 +52,8 @@ class Candidates():
 	
 class ActionSet():
 	
+class UserResponse(BaseModel):
+
+class UserCreate(BaseModel):
+
+class CheckResponceSchema(BaseModel):

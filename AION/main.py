@@ -1,8 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy.orm import Session
+from datetime import timedelta
 from aion import AION
 from typing import Optional
 from env_interfaces import Environment
-from models import AgentState
+from schemas import AgentState,UserResponse,UserCreate
+from infra.database import get_db
+from infra.crud import create_user,get_user_by_email,get_user_by_username,verify_password
 from fastapi.templating import Jinja2Templates
 
 app=FastAPI()
@@ -21,7 +26,6 @@ async def register(user: UserCreate, db: Session = Depends(get_db)):
 	if existing_user:
 		raise HTTPException(status_code=400,detail="Email already registered")
 	user=create_user(db, user)
-	create_user_stream(user.id)
 	return user
 
 @app.post("/login")

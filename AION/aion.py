@@ -3,11 +3,11 @@ from multiprocessing import Process, Queue, Event
 import time
 
 from env_interfaces import Environment
-from models import AgentState,HealthMap
+from schemas import AgentState,HealthMap
 
 from AION.world_state_generator_package.world_state_generator import Eye, KPI_compute
 from AION.rul_predictor_package.RUL_predictor import Foreseer
-from AION.decission_maker_package.decission_maker import Watcher
+from AION.decision_maker_package.decision_maker import Watcher
 from AION.planner_package.planner import Thinker
 from AION.action_optimizer_package.action_space import Pruner
 from AION.rl_scorer_package.rl_scorer import ViceOne
@@ -32,7 +32,7 @@ class AION:
 		self.feedback_q=Queue(maxsize=5)	# queue for letting Muse know the actions performed offereb by muse and polled by Automaton 
 		self.kpi_q=Queue(maxsize=5)		# queue for KPI sharing offered by Eye and polled by Muse 
 		
-		self.eye=Eye(world)
+		self.eye=Eye(world=env)
 		self.foreseer=Foreseer()
 		self.watcher=Watcher()
 		self.thinker=Thinker()
@@ -86,11 +86,12 @@ class AION:
 				else:
 					self.out_q.put({
 						"type":"error",
-						"payload"={
+						"payload":{
 							"msg":"unknown query",
 							"query":query
+							}
 						}
-					})
+					)
 			time.sleep(0.1)
 				
 	
@@ -98,7 +99,7 @@ class AION:
 		while not self.stop_event.is_set():
 			try:
 				state,kpi=self.state_q.get(timeout=1)
-			except queue.Empty:
+			except Queue.Empty:
 				continue
 
 			health_map=HealthMap(self.forseer.predict(state))
@@ -108,24 +109,26 @@ class AION:
 					"type":"status",
 					"payload":{
 						"msg":"Watcher found healty state"
+						}
 					}
-				})
+				)
 				continue
 
 			if self.paused_event.is_set():
 				self.in_q.put({
 					"type":"status",
 					"payload":{
-						"msg":"Watcher found unhealthy state, AION in paused state"}
+						"msg":"Watcher found unhealthy state, AION in paused state"
+						}
 					}
-				})
+				)
 				continue
 
 			self.plan_q.put(health_map)
 
 			try:
 				candidates=self.candidate_q.get(timeout=2)
-			except queue.Empty:
+			except Queue.Empty:
 				continue
 
 			feasible=self.pruner.prune(candidates)
@@ -154,7 +157,7 @@ class AION:
 				continue
 			try:
 				action,state,kpi=self.action_q.get(timeout=0.1)		
-			except queue.Empty:
+			except Queue.Empty:
 				continue
 
 			if self.automaton.perform(action):
@@ -186,12 +189,12 @@ class AION:
 		self.aion_state=AgentState.Running
 		self.stop_event.clear()
 		self.processes=[
-			Process(target=run_eye),
-			Process(target=run_thinker),
-			Process(target=run_voice),
-			Process(target=step),
-			Process(target=run_automton),
-			Process(target=run_muse)
+			Process(target=self.run_eye),
+			Process(target=self.run_thinker),
+			Process(target=self.run_voice),
+			Process(target=self.step),
+			Process(target=self.run_automton),
+			Process(target=self.run_muse)
 		]
 		for p in self.processes:
 			p.start()
